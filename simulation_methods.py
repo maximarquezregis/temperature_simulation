@@ -25,8 +25,8 @@ def euler(ambient_temp, k, q, turn_on, turn_off, num_steps, initial_temp, h):
     # Preallocate the list of temperatures
 
     # Initialize temperatures' array with all 0.0
-    # Array's size is num_steps + 1
-    temperatures = [0.0] * (num_steps + 1)
+    # Array's size is num_steps
+    temperatures = [0.0] * (int(num_steps / h) + 1)
     temperatures[0] = initial_temp
 
     # Initialize last_derivative based on the initial temperature
@@ -35,7 +35,7 @@ def euler(ambient_temp, k, q, turn_on, turn_off, num_steps, initial_temp, h):
     elif initial_temp > turn_off:
         last_derivative = 1
 
-    for i in range(num_steps):
+    for i in range(int(num_steps/h)):
         temperatures[i + 1] = temperatures[i] + h * differential_equation(
             temperatures[i],
             ambient_temp,
