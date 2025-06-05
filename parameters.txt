@@ -1,3 +1,8 @@
-parameter1=1
-parameter2=2
-parameter3=3
+t_0=15
+t_amb=5
+t_on=18
+t_off=22
+k=0.1
+q=4
+h=0.1
+sim_time=200

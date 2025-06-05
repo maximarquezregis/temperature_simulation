@@ -1,3 +1,5 @@
+import simulation_methods
+
 def read_parameters(filename):
     parameters = {}
     with open(filename, 'r') as file:
