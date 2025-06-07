@@ -9,45 +9,6 @@ def differential_equation(current_temp, ambient_temp, k, q, heater_on):
 
 
 def euler(ambient_temp, k, q, turn_on, turn_off, num_steps, initial_temp, h):
-    global last_derivative
-
-    # Preallocate the list of temperatures
-
-    # Initialize temperatures' array with all 0.0
-    # Array's size is num_steps
-    temperatures = [0.0] * (int(num_steps / h) + 1)
-    temperatures[0] = initial_temp
-
-    # Array to save the heater status (1: on, 0: off)
-    heater_states = [0] * (int(num_steps / h) + 1)
-
-    # Initialize last_derivative based on the initial temperature
-    if initial_temp < turn_on:
-        last_derivative = 0
-        heater_states[0] = 1
-    elif initial_temp > turn_off:
-        last_derivative = 1
-        heater_states[0] = 0
-    else:
-        heater_states[0] = 1 if last_derivative == 0 else 0
-
-    for i in range(int(num_steps/h)):
-        temperatures[i + 1] = temperatures[i] + h * differential_equation(
-            temperatures[i],
-            ambient_temp,
-            k,
-            q,
-            turn_on,
-            turn_off
-        )
-        # Save heater state after updating last_derivative
-        heater_states[i + 1] = 1 if last_derivative == 0 else 0
-
-    return temperatures, heater_states
-
-def heun(ambient_temp, k, q, turn_on, turn_off, num_steps, initial_temp, h):
-    global last_derivative
-
     # Preallocate the list of temperatures
 
     # Initialize temperatures' array with all 0.0
@@ -58,15 +19,34 @@ def heun(ambient_temp, k, q, turn_on, turn_off, num_steps, initial_temp, h):
     # Array to save the heater status (1: on, 0: off)
     heater_states = [1] * (int(num_steps / h) + 1)
 
-    # Initialize last_derivative based on the initial temperature
-    if initial_temp < turn_on:
-        last_derivative = 0
-        heater_states[0] = 1
-    elif initial_temp > turn_off:
-        last_derivative = 1
-        heater_states[0] = 0
-    else:
-        heater_states[0] = 1 if last_derivative == 0 else 0
+    for i in range(int(num_steps/h)):
+        temperatures[i + 1] = temperatures[i] + h * differential_equation(
+            temperatures[i],
+            ambient_temp,
+            k,
+            q,
+            heater_states[i]
+        )
+    
+        if temperatures[i + 1] < turn_on:
+            heater_states[i] = 1
+        elif temperatures[i + 1] > turn_off:
+            heater_states[i] = 0
+
+        heater_states[i + 1] = heater_states[i]
+
+    return temperatures, heater_states
+
+def heun(ambient_temp, k, q, turn_on, turn_off, num_steps, initial_temp, h):
+    # Preallocate the list of temperatures
+
+    # Initialize temperatures' array with all 0.0
+    # Array's size is num_steps
+    temperatures = [0.0] * (int(num_steps / h) + 1)
+    temperatures[0] = initial_temp
+
+    # Array to save the heater status (1: on, 0: off)
+    heater_states = [1] * (int(num_steps / h) + 1)
 
     for i in range(int(num_steps/h)):
 

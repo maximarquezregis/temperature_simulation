@@ -32,7 +32,7 @@ if __name__ == "__main__":
     initial_temp = float(parameters["t_0"])
     h = float(parameters["h"])
 
-    result, heater_states = heun(t_amb, k, q, turn_on, turn_off, num_steps, initial_temp, h)
+    result, heater_states = euler(t_amb, k, q, turn_on, turn_off, num_steps, initial_temp, h)
 
     # Print the result temperatures
     with open("results.txt", "w") as f:
