@@ -30,9 +30,15 @@ if __name__ == "__main__":
     turn_off = float(parameters["t_off"])
     num_steps = int(parameters["sim_time"])
     initial_temp = float(parameters["t_0"])
+    method = parameters["method"]
     h = float(parameters["h"])
 
-    result, heater_states = euler(t_amb, k, q, turn_on, turn_off, num_steps, initial_temp, h)
+    if method == "euler":
+        result, heater_states = euler(t_amb, k, q, turn_on, turn_off, num_steps, initial_temp, h)
+    elif method == "heun":
+        result, heater_states = heun(t_amb, k, q, turn_on, turn_off, num_steps, initial_temp, h)
+    else:
+        print("Error: Input a valid simulatoon method")
 
     # Print the result temperatures
     with open("results.txt", "w") as f:
@@ -42,13 +48,13 @@ if __name__ == "__main__":
             f.write(f"{i} {temp} {state}\n")
 
     # Create Gnuplot script
-    gnuplot_script = """set terminal png size 800,600
-        set output 'grafico.png'
-        set xlabel 'Tiempo (s)'
-        set ylabel 'Temperatura (°C)'
-        set title 'Evolución de la Temperatura T(n)'
+    gnuplot_script = f"""set terminal png size 800,600
+        set output 'graphic.png'
+        set xlabel 'Time (s)'
+        set ylabel 'Temperature (°C)'
+        set title 'Temperature T(n) evolution using {method}'
         set grid
-        plot "results.txt" using ($1/10.0):2 with lines lw 2 lc rgb "red" title "Temperatura"
+        plot "results.txt" using ($1/10.0):2 with lines lw 2 lc rgb "red" title "Temperature"
         set output
         """
 

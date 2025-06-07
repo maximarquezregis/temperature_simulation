@@ -6,3 +6,4 @@ k=0.1
 q=4
 h=0.1
 sim_time=200
+method=heun

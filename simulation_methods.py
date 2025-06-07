@@ -1,6 +1,3 @@
-# Global flag to remember the last derivative used
-last_derivative = 0
-
 def differential_equation(current_temp, ambient_temp, k, q, heater_on):
     if heater_on:
         return -k * (current_temp - ambient_temp) + q
@@ -50,14 +47,12 @@ def heun(ambient_temp, k, q, turn_on, turn_off, num_steps, initial_temp, h):
 
     for i in range(int(num_steps/h)):
 
-
         k1 = differential_equation(temperatures[i],
             ambient_temp,
             k,
             q,
             heater_states[i])
 
-        original_derivate = last_derivative
         k2 = differential_equation(temperatures[i] + h * k1,
                                    ambient_temp,
                                    k,
@@ -72,7 +67,7 @@ def heun(ambient_temp, k, q, turn_on, turn_off, num_steps, initial_temp, h):
             q,
             heater_states[i])
 
-        # Save heater state after updating last_derivative
+        # Save heater state
         if temperatures[i + 1] < turn_on:
             heater_states[i] = 1
         elif temperatures[i + 1] > turn_off:
