@@ -29,11 +29,18 @@ def euler(ambient_temp, k, q, turn_on, turn_off, num_steps, initial_temp, h):
     temperatures = [0.0] * (int(num_steps / h) + 1)
     temperatures[0] = initial_temp
 
+    # Array to save the heater status (1: on, 0: off)
+    heater_states = [0] * (int(num_steps / h) + 1)
+
     # Initialize last_derivative based on the initial temperature
     if initial_temp < turn_on:
         last_derivative = 0
+        heater_states[0] = 1
     elif initial_temp > turn_off:
         last_derivative = 1
+        heater_states[0] = 0
+    else:
+        heater_states[0] = 1 if last_derivative == 0 else 0
 
     for i in range(int(num_steps/h)):
         temperatures[i + 1] = temperatures[i] + h * differential_equation(
@@ -44,5 +51,7 @@ def euler(ambient_temp, k, q, turn_on, turn_off, num_steps, initial_temp, h):
             turn_on,
             turn_off
         )
+        # Save heater state after updating last_derivative
+        heater_states[i + 1] = 1 if last_derivative == 0 else 0
 
-    return temperatures
+    return temperatures, heater_states

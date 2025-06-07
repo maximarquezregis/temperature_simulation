@@ -31,8 +31,11 @@ if __name__ == "__main__":
     initial_temp = float(parameters["t_0"])
     h = float(parameters["h"])
 
-    result = euler(t_amb, k, q, turn_on, turn_off, num_steps, initial_temp, h)
+    result, heater_states = euler(t_amb, k, q, turn_on, turn_off, num_steps, initial_temp, h)
 
     # Print the result temperatures
-    for i, temp in enumerate(result):
-        print(f"Step {i}: {temp}")
+    with open("results.txt", "w") as f:
+        for i, (temp, heater) in enumerate(zip(result, heater_states)):
+            state = "ON" if heater == 1 else "OFF"
+            print(f"Step {i}: {temp} ({state})")
+            f.write(f"{i} {temp} {state}\n")
