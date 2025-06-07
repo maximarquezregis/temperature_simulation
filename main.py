@@ -1,5 +1,5 @@
 import subprocess
-from simulation_methods import euler
+from simulation_methods import euler, heun
 
 
 def read_parameters(filename):
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     initial_temp = float(parameters["t_0"])
     h = float(parameters["h"])
 
-    result, heater_states = euler(t_amb, k, q, turn_on, turn_off, num_steps, initial_temp, h)
+    result, heater_states = heun(t_amb, k, q, turn_on, turn_off, num_steps, initial_temp, h)
 
     # Print the result temperatures
     with open("results.txt", "w") as f:
@@ -43,14 +43,14 @@ if __name__ == "__main__":
 
     # Create Gnuplot script
     gnuplot_script = """set terminal png size 800,600
-set output 'grafico.png'
-set xlabel 'Tiempo (s)'
-set ylabel 'Temperatura (°C)'
-set title 'Evolucion de la Temperatura T(n)'
-set grid
-plot "results.txt" using 1:2 with lines lw 2 lc rgb "red" title "Temperatura"
-set output
-"""
+        set output 'grafico.png'
+        set xlabel 'Tiempo (s)'
+        set ylabel 'Temperatura (°C)'
+        set title 'Evolución de la Temperatura T(n)'
+        set grid
+        plot "results.txt" using 1:2 with lines lw 2 lc rgb "red" title "Temperatura"
+        set output
+        """
 
     with open("plot.gp", "w") as script_file:
         script_file.write(gnuplot_script)
