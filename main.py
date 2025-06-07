@@ -48,7 +48,7 @@ if __name__ == "__main__":
         set ylabel 'Temperatura (°C)'
         set title 'Evolución de la Temperatura T(n)'
         set grid
-        plot "results.txt" using 1:2 with lines lw 2 lc rgb "red" title "Temperatura"
+        plot "results.txt" using ($1/10.0):2 with lines lw 2 lc rgb "red" title "Temperatura"
         set output
         """
 
