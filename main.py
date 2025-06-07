@@ -1,3 +1,4 @@
+import subprocess
 from simulation_methods import euler
 
 
@@ -39,3 +40,20 @@ if __name__ == "__main__":
             state = "ON" if heater == 1 else "OFF"
             print(f"Step {i}: {temp} ({state})")
             f.write(f"{i} {temp} {state}\n")
+
+    # Create Gnuplot script
+    gnuplot_script = """set terminal png size 800,600
+set output 'grafico.png'
+set xlabel 'Tiempo (s)'
+set ylabel 'Temperatura (°C)'
+set title 'Evolucion de la Temperatura T(n)'
+set grid
+plot "results.txt" using 1:2 with lines lw 2 lc rgb "red" title "Temperatura"
+set output
+"""
+
+    with open("plot.gp", "w") as script_file:
+        script_file.write(gnuplot_script)
+
+    # Execute Gnuplot
+    subprocess.run(["gnuplot", "plot.gp"])
