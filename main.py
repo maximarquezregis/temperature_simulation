@@ -38,7 +38,7 @@ if __name__ == "__main__":
     elif method == "heun":
         result, heater_states = heun(t_amb, k, q, turn_on, turn_off, num_steps, initial_temp, h)
     else:
-        print("Error: Input a valid simulatoon method")
+        print("Error: Input a valid simulation method")
 
     # Print the result temperatures
     with open("results.txt", "w") as f:
