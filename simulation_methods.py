@@ -61,12 +61,6 @@ def heun(ambient_temp, k, q, turn_on, turn_off, num_steps, initial_temp, h):
 
         temperatures[i + 1] = temperatures[i] + 0.5 * h * (k1 + k2)
 
-        differential_equation(temperatures[i + 1],
-            ambient_temp,
-            k,
-            q,
-            heater_states[i])
-
         # Save heater state
         if temperatures[i + 1] < turn_on:
             heater_states[i] = 1
